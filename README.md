@@ -1,42 +1,31 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-# Tiny Tapeout Verilog Project Template
+## How it works
 
-- [Read the documentation for project](docs/info.md)
+SUBLEQ (SUbtract and Branch if Less than or EQual to zero) is a type of OISC (One Instruction Set Computer) architecture.
 
-## What is Tiny Tapeout?
+It has only one instruction of the form:
+```
+SUBLEQ A B C
+```
 
-Tiny Tapeout is an educational project that aims to make it easier and cheaper than ever to get your digital and analog designs manufactured on a real chip.
+Equivalent to this pseudocode:
+```
+mem[B] = mem[B] - mem[A]
+if mem[B] <= 0 then goto C\
+```
 
-To learn more and get started, visit https://tinytapeout.com.
+By compounding instructions it is capable of doing other operations, such as addition.
 
-## Set up your Verilog project
+## How to test
 
-1. Add your Verilog files to the `src` folder.
-2. Edit the [info.yaml](info.yaml) and update information about your project, paying special attention to the `source_files` and `top_module` properties. If you are upgrading an existing Tiny Tapeout project, check out our [online info.yaml migration tool](https://tinytapeout.github.io/tt-yaml-upgrade-tool/).
-3. Edit [docs/info.md](docs/info.md) and add a description of your project.
-4. Adapt the testbench to your design. See [test/README.md](test/README.md) for more information.
+This module requires a RP2040 or similar connected to the input and output ports to act as an external 16-bit memory (RAM).
 
-The GitHub action will automatically build the ASIC files using [LibreLane](https://www.zerotoasiccourse.com/terminology/librelane/).
+A read request from the CPU triggers the "read_latch" ouput for one cycle, with the first LSB (least significant byte) sent via the output pins.
+Which is followed by the MSB (most significant byte) in the next cycle. The CPU expects the contents of the address to be returned via the input pins in the same order.
 
-## Enable GitHub actions to build the results page
+Similarly, a write request from the CPU triggers the "write_latch" output for one cycle, in the same manner as above. However with an additional 2 cycles for the value to assign at the address. The CPU does not expect a value from the input ports.
 
-- [Enabling GitHub Pages](https://tinytapeout.com/faq/#my-github-action-is-failing-on-the-pages-part)
+## External hardware
 
-## Resources
-
-- [FAQ](https://tinytapeout.com/faq/)
-- [Digital design lessons](https://tinytapeout.com/digital_design/)
-- [Learn how semiconductors work](https://tinytapeout.com/siliwiz/)
-- [Join the community](https://tinytapeout.com/discord)
-- [Build your design locally](https://www.tinytapeout.com/guides/local-hardening/)
-
-## What next?
-
-- [Submit your design to the next shuttle](https://app.tinytapeout.com/).
-- Edit [this README](README.md) and explain your design, how it works, and how to test it.
-- Share your project on your social network of choice:
-  - LinkedIn [#tinytapeout](https://www.linkedin.com/search/results/content/?keywords=%23tinytapeout) [@TinyTapeout](https://www.linkedin.com/company/100708654/)
-  - Mastodon [#tinytapeout](https://chaos.social/tags/tinytapeout) [@matthewvenn](https://chaos.social/@matthewvenn)
-  - X (formerly Twitter) [#tinytapeout](https://twitter.com/hashtag/tinytapeout) [@tinytapeout](https://twitter.com/tinytapeout)
-  - Bluesky [@tinytapeout.com](https://bsky.app/profile/tinytapeout.com)
+RP2040
