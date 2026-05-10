@@ -1,5 +1,7 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
+# SUBLEQ CPU
+![gds render](subleq_gds.png)
 ## How it works
 
 SUBLEQ (SUbtract and Branch if Less than or EQual to zero) is a type of OISC (One Instruction Set Computer) architecture.
